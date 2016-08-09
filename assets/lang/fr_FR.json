@@ -1,0 +1,60 @@
+{
+    "id": "fr",
+    "country_code": "fr",
+    "separator": " ",
+    "incomplete": "Formulaire incomplet",
+    "required_text": "Requis",
+    "required_fields": "Champs requis restants : ",
+    "empty_field": "Sélection...",
+    "tel":{
+        "message": "Veuillez saisir ce champs sous le format standart pour numéro de téléphone."
+    },
+    "email":{
+        "message": "Veuillez saisir ce champs sous le format standart pour addresse électronique."
+    },
+    "url":{
+        "message": "Veuillez entrer une URL correcte."
+    },
+    "zipcode":{
+        "message": "Veuillez entrer un code postal correct."
+    },
+    "date":{
+        "message": "Veuillez entrer une date au format jj/mm/aaaa"
+    },
+    "time":{
+        "message": "Veuillez entrer une heure au format hh:mm"
+    },
+    "number":{
+        "message": "Veuillez entrer un nombre valide."
+    },
+    "katakana":{
+        "message": "Veuillez saisir ce champs en katakana"  
+    },
+    "hiragana":{
+        "message": "Veuillez saisir ce champs en hiragana"  
+    },
+    "prefectures": [
+        {"id": 1, "name": "Alsace"}, 
+        {"id": 2, "name": "Aquitaine"},
+        {"id": 3, "name": "Auvergne"}, 
+        {"id": 4, "name": "Basse-Normandie"}, 
+        {"id": 5, "name": "Bourgogne"}, 
+        {"id": 6, "name": "Bretagne"}, 
+        {"id": 7, "name": "Centre-Val de Loire"}, 
+        {"id": 8, "name": "Champagne-Ardenne"}, 
+        {"id": 9, "name": "Corse"}, 
+        {"id": 10, "name": "Franche-Comté"}, 
+        {"id": 11, "name": "Haute-Normandie"}, 
+        {"id": 12, "name": "Île-de-France"}, 
+        {"id": 13, "name": "Languedoc-Roussillon"}, 
+        {"id": 14, "name": "Limousin"}, 
+        {"id": 15, "name": "Lorraine"}, 
+        {"id": 16, "name": "Midi-Pyrénées"}, 
+        {"id": 17, "name": "Nord-Pas-De-Calais"}, 
+        {"id": 18, "name": "Pays de la Loire"}, 
+        {"id": 19, "name": "Picardie"}, 
+        {"id": 20, "name": "Poitou-Charentes"}, 
+        {"id": 21, "name": "Provence-Alpes-Côte d'Azur"}, 
+        {"id": 22, "name": "Rhône-Alpes"}
+    ]
+}

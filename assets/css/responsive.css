@@ -1,0 +1,27 @@
+.wrapper,
+.table,
+.fo-label{
+    width: 100%;
+}
+
+.wrapper{
+    padding: 0;
+}
+
+section{
+    padding: 5%;
+}
+
+.table, .td, .tr{
+    display: block;
+}
+
+h1{
+    font-size: 3em;
+}
+
+#fo-required-fields{
+    height: 30px;
+    line-height: 30px;
+    font-size: 0.8em;
+}

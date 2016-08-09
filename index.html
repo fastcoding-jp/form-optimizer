@@ -1,182 +1,149 @@
 <html>
 <head>
-    <title>Form optimizer tests</title>
+    <meta charset="utf-8">
+    <meta name="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Form Optimizer</title>
     
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="assets/css/bootstrapValidator.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="assets/css/jquery.form-optimizer.css">
-    <style>.container{padding-top: 100px;}</style>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" media="screen and (max-width: 640px)" href="assets/css/responsive.css">
     
     <script src="assets/js/jquery-3.0.0.min.js"></script>
     <script src="assets/js/jquery.form.optimizer.js"></script>
-    <script>
-        $(function(){
-            $("#contact_form").formOptimizer({
-                language_path: 'assets/lang/',
-                language:'ja_JP'
-            });
-        });
-    </script>
+    <script src="assets/js/main.js"></script>
 </head>
 <body>
-    <div class="container">
+    
+    <section id="section-title">
+        <div class="wrapper">
+            <h1>Form Optimizer</h1>
+        </div>
+    </section><!-- /#section-title -->
+    
+    <section id="section-form">
 
-        <form class="well form-horizontal" action=" " method="post"  id="contact_form">
-            <fieldset>
-
-            <!-- Form Name -->
-            <legend>Contact Us Today!</legend>
-
-            <!-- Text input-->
-
-            <div class="form-group">
-              <label class="col-md-4 control-label">First Name</label>  
-              <div class="col-md-4 inputGroupContainer">
-              <div class="input-group">
-              <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-              <input  name="first_name" placeholder="First Name" class="form-control fo-required"  type="text">
-                </div>
-              </div>
-            </div>
-
-            <!-- Text input-->
-
-            <div class="form-group">
-              <label class="col-md-4 control-label" >Last Name</label> 
-                <div class="col-md-4 inputGroupContainer">
-                <div class="input-group">
-              <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-              <input name="last_name" placeholder="Last Name" class="form-control fo-required"  type="text">
-                </div>
-              </div>
-            </div>
-
-            <!-- Text input-->
-                   <div class="form-group">
-              <label class="col-md-4 control-label">E-Mail</label>  
-                <div class="col-md-4 inputGroupContainer">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-              <input name="email" placeholder="E-Mail Address" class="form-control fo-required"  type="email">
-                </div>
-              </div>
-            </div>
-
-
-            <!-- Text input-->
-
-            <div class="form-group">
-              <label class="col-md-4 control-label">Phone #</label>  
-                <div class="col-md-4 inputGroupContainer">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                    <input name="phone" placeholder="(845)555-1212" class="form-control" type="tel">
-                </div>
-              </div>
-            </div>
-
-            <!-- Text input-->
-
-            <div class="form-group">
-              <label class="col-md-4 control-label">Address</label>  
-                <div class="col-md-4 inputGroupContainer">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
-                    <input name="address" placeholder="Address" class="form-control" type="">
-                </div>
-              </div>
-            </div>
-
-            <!-- Text input-->
-
-            <div class="form-group">
-              <label class="col-md-4 control-label">City</label>  
-                <div class="col-md-4 inputGroupContainer">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
-                    <input name="city" placeholder="city" class="form-control"  type="text">
-                </div>
-              </div>
-            </div>
-
-            <!-- Select Basic -->
-
-            <div class="form-group"> 
-              <label class="col-md-4 control-label">State</label>
-                <div class="col-md-4 selectContainer">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
-                <select name="state" class="form-control selectpicker" >
-                  <option value=" " >Please select your state</option>
-                  
-                </select>
-              </div>
-            </div>
-            </div>
-
-            <!-- Text input-->
-
-            <div class="form-group">
-              <label class="col-md-4 control-label">Zip Code</label>  
-                <div class="col-md-4 inputGroupContainer">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
-              <input name="zip" placeholder="Zip Code" class="form-control"  type="text">
-                </div>
-            </div>
-            </div>
-
-            <!-- Text input-->
-            <div class="form-group">
-              <label class="col-md-4 control-label">Website or domain name</label>  
-               <div class="col-md-4 inputGroupContainer">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-              <input name="website" placeholder="Website or domain name" class="form-control" type="url">
-                </div>
-              </div>
-            </div>
-
-            <!-- radio checks -->
-             <div class="form-group">
-                <label class="col-md-4 control-label">Do you have hosting?</label>
-                <div class="col-md-4">
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="hosting" value="yes" /> Yes
-                        </label>
+        <form id="contact_form" class="wrapper">
+            
+            <div class="table">
+                
+                <div class="tr fo-item fo-required">
+                    <div class="td fo-label">お名前</div>
+                    <div class="td fo-fields double">
+                        <input type="text" class="first" placeholder="例）日本">
+                        <input type="text" class="second" placeholder="例）太郎">
+                        <div class="fo-errors"></div>
                     </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="hosting" value="no" /> No
-                        </label>
+                </div><!-- /.fo-item -->
+                
+                <div class="tr fo-item fo-required">
+                    <div class="td fo-label">お名前（カナ）</div>
+                    <div class="td fo-fields double">
+                        <input type="text" class="fo-katakana first" placeholder="例）二ホン">
+                        <input type="text" class="fo-katakana second" placeholder="例）タロウ">
+                        <div class="fo-errors"></div>
+                    </div>
+                </div><!-- /.fo-item -->
+                
+                <div class="tr fo-item fo-required">
+                    <div class="td fo-label">性別</div>
+                    <div class="td fo-fields">
+                        <label for="genre-m">男</label>
+                        <input type="radio" id="gender-m" name="gender" value="m">
+                        <label for="genre-f">女</label>
+                        <input type="radio" id="gender-f" name="gender" value="f">
+                        <div class="fo-errors"></div>
+                    </div>
+                </div><!-- /.fo-item -->
+                
+                <div class="tr fo-item">
+                    <div class="td fo-label">生年月日</div>
+                    <div class="td fo-fields">
+                        <input type="date" placeholder="例）1980/01/01">
+                        <div class="fo-errors"></div>
+                    </div>
+                </div><!-- /.fo-item -->
+                
+                <div class="tr fo-item">
+                    <div class="td fo-label">打ち合わせ可能時間</div>
+                    <div class="td fo-fields">
+                        <input type="time" placeholder="例）16:00">
+                        <div class="fo-errors"></div>
+                    </div>
+                </div><!-- /.fo-item -->
+                
+                <div class="tr fo-item">
+                    <div class="td fo-label">プロジェクト数</div>
+                    <div class="td fo-fields">
+                        <input type="number" placeholder="例）2">
+                        <div class="fo-errors"></div>
+                    </div>
+                </div><!-- /.fo-item -->
+                
+                <div class="tr fo-item fo-required">
+                    <div class="td fo-label">メールアドレス</div>
+                    <div class="td fo-fields">
+                        <input type="email" placeholder="例）nihon.tarou@email.co.jp">
+                        <div class="fo-errors"></div>
+                    </div>
+                </div><!-- /.fo-item -->
+                
+                <div class="tr fo-item">
+                    <div class="td fo-label">ホームページ</div>
+                    <div class="td fo-fields">
+                        <input type="url" placeholder="例）https://homepage.co.jp">
+                        <div class="fo-errors"></div>
+                    </div>
+                </div><!-- /.fo-item -->
+                
+                <div class="tr fo-item">
+                    <div class="td fo-label">お電話番号</div>
+                    <div class="td fo-fields">
+                        <input type="tel" placeholder="例）080-8080-8080">
+                        <div class="fo-errors"></div>
+                    </div>
+                </div><!-- /.fo-item -->
+                
+                <div class="tr fo-item fo-required">
+                    <div class="td fo-label">郵便番号</div>
+                    <div class="td fo-fields">
+                        <input type="text" class="fo-zipcode" placeholder="例）107-0052">
+                        <div class="fo-errors"></div>
+                    </div>
+                </div><!-- /.fo-item -->
+                
+                <div class="tr fo-item fo-required">
+                    <div class="td fo-label">都道府県</div>
+                    <div class="td fo-fields">
+                        <select class="fo-region"></select>
+                        <div class="fo-errors"></div>
+                    </div>
+                </div><!-- /.fo-item -->
+                
+                <dv class="tr fo-item">
+                    <div class="td fo-label">ご住所</div>
+                    <div class="td fo-fields">
+                        <input type="text" class="fo-address-1" placeholder="例）港区赤坂">
+                        <input type="text" class="fo-address-2" placeholder="例）１丁目２番地３号">
+                        <div class="fo-errors"></div>
+                    </div>
+                </dv><!-- /.fo-item -->
+                
+                <div class="tr fo-item">
+                    <div class="td fo-label">その他</div>
+                    <div class="td fo-fields">
+                        <textarea placeholder="コメントがあればここに書いてください..."></textarea>
                     </div>
                 </div>
-            </div>
-
-            <!-- Text area -->
-
-            <div class="form-group">
-              <label class="col-md-4 control-label">Project Description</label>
-                <div class="col-md-4 inputGroupContainer">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                        <textarea class="form-control" name="comment" placeholder="Project Description"></textarea>
-              </div>
-              </div>
-            </div>
-
-            <!-- Button -->
-            <div class="form-group">
-              <label class="col-md-4 control-label"></label>
-              <div class="col-md-4">
-                <button type="submit" class="btn btn-warning fo-submit" >Send <span class="glyphicon glyphicon-send"></span></button>
-              </div>
-            </div>
-
-            </fieldset>
-        </form>
-    </div><!-- /.container -->
+                
+            </div><!-- /.table -->
+            
+            <div class="submit">
+                <button type="submit" class="fo-submit">送信</button>
+            </div><!-- /.fo-submit -->
+            
+        </form><!-- /#contact_form -->
+        
+    </section><!-- /#section-form -->
 </body>
 </html>

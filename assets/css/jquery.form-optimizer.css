@@ -1,9 +1,9 @@
 #fo-required-fields{
     display: none;
     position: fixed;
-    top: 70px;
+    top: 10px;
+    padding: 0 20px;
     right: 10px;
-    width: 200px;
     height: 50px;
     background: rgba(255, 0, 0, 0.75);
     color: white;
@@ -12,25 +12,42 @@
     line-height: 50px;
 }
 
-.fo-optimized .fo-item{
+.fo-optimized .fo-field{
     -webkkit-transition: all .3s ease-in;
     transition: all .3s ease-in;
 }
 
-.fo-optimized .fo-item.fo-invalid-field:not(.fo-required).fo-not-empty,
-.fo-optimized .fo-item.fo-invalid-field.fo-required{
-    background: #ffdfdf;
+.fo-optimized .fo-item:not(.fo-required) .fo-field.fo-invalid-field.fo-not-empty,
+.fo-optimized .fo-item.fo-required .fo-field.fo-invalid-field{
+    background: rgba(251, 194, 178, 0.5);
 }
 
-.fo-optimized .fo-invalid-field-message{
-    font-size: 12px;
+.fo-optimized .fo-errors{
     color: grey;
+    font-size: 12px;
 }
 
 .fo-optimized .fo-submit-invalid{
-    background: grey;
+    background: #292929;
     color: white;
-    width: auto !important;
+    width: 200px;
     padding-left: 5px;
     padding-right: 5px;
+}
+
+.fo-optimized .fo-required-text{
+    display: inline-block;
+    height: 20px;
+    background: rgba(255, 0, 0, 0.75);
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+    padding: 0px 10px;
+    margin-left: 10px;
+}
+
+.fo-error{
+    color: #bd9b9b;
 }

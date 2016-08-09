@@ -4,14 +4,18 @@ $.fn.formOptimizer = function(settings){
     
     app.$form = $(this);
     
-    var scripts= document.getElementsByTagName('script');
-    var path= scripts[scripts.length-1].src.split('?')[0];
-    app.current_path = path.split('/').slice(0, -1).join('/')+'/';
-    
     app.settings = $.extend({
-        language_path: app.current_path,
+        language_path: "./",
         language: 'en_US',
-        tel_mode: 'global'
+        email_regexp: /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i,
+        tel_regexp: /^[0-9]{2,3}[0-9]{4}[0-9]{4}$/g,
+        url_regexp: /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/g,
+        zipcode_regexp: /^[0-9]{3}-[0-9]{4}/g,
+        date_regexp: /^[0-9]{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[1-2][0-9]|3[0-1])$/g,
+        time_regexp: /^([0-1]{1}[0-9]{1}|2[0-3]):[0-5]{1}[0-9]$/g,
+        number_regexp: /^\d*$/g,
+        required_text: true,
+        on_load: function(){}
     }, settings);
     
     app.init = function(){
@@ -20,104 +24,162 @@ $.fn.formOptimizer = function(settings){
         app.events();
     }
     
+    app.setClasses = function(){
+        
+        app.$form.addClass("fo-optimized");
+        app.$form.find("input, select, textarea").addClass("fo-field");
+        app.$form.find("[type='email']").addClass("fo-email");
+        app.$form.find("[type='tel']").addClass("fo-tel");
+        app.$form.find("[type='url']").addClass("fo-url");
+        app.$form.find("[type='date']").addClass("fo-date");
+        app.$form.find("[type='time']").addClass("fo-time");
+        app.$form.find("[type='number']").addClass("fo-number");
+        app.$form.find("[type='radio']").addClass("fo-radio");
+        app.$form.find("[type='checkbox']").addClass("fo-checkbox");
+        app.$form.find("select").addClass("fo-select");
+        app.$form.find("textarea").addClass("fo-textarea");
+        
+        app.$form.find(".fo-field").each(function(index){
+            $(this).attr("fo-field-id", index);
+        });
+    }
+    
     app.initHTML = function(){
+        
         if($("#fo-required-fields").length==0) $("body").append('<div id="fo-required-fields">'+app.lang.required_fields+'<span></span></div>');
-        app.$submit_button = app.$form.find(".fo-submit")[0].outerHTML;
+        if(app.settings.required_text) app.find(".fo-item.fo-required .fo-label").append('<span class="fo-required-text">'+app.lang.required_text+'</span>');
+        app.add_incomplete_button();
+        if(app.$form.find(".fo-region").length>0){
+            app.$form.find(".fo-region").append('<option value="">'+app.lang.empty_field+'</option>')
+            app.lang.prefectures.forEach(function(region){
+                app.$form.find(".fo-region").append('<option value="'+region.name+'">'+region.name+'</option>')
+            });
+        }
+    }
+    
+    app.add_incomplete_button = function(){
+        app.$form[0].submit_button = app.$form.find(".fo-submit")[0].outerHTML;
         app.$form.find(".fo-submit").clone().addClass("fo-submit-invalid").removeClass("fo-submit").appendTo(app.$form.find(".fo-submit").parent());
         app.$form.find(".fo-submit").remove();
         if(app.$form.find(".fo-submit-invalid").is("button")) app.$form.find(".fo-submit-invalid").html(app.lang.incomplete).attr("type", "button");
         else app.$form.find(".fo-submit-invalid").html("").attr("value", app.lang.incomplete).attr("type", "button");
     }
     
-    app.setClasses = function(){
-        app.$form.addClass("fo-optimized");
-        app.$form.find("input, select, textarea").addClass("fo-item");
-        app.$form.find("input[type]").not("type[button]").each(function(){
-            $(this).addClass("fo-"+$(this).attr("type"));
-        });
-        app.$form.find("select").addClass("fo-select");
-        app.$form.find("textarea").addClass("fo-textarea");
-    }
-    
     app.events = function(){
-        
-        app.$form.on("click", function(){
-            if(!app.$form.hasClass("fo-started-input")){
-                app.$form.find(".fo-item").each(function(){
-                    app.checkField($(this));
-                });
-                app.$form.addClass("fo-started-input");
-            }
-        })
-        
-        app.$form.find(".fo-item").on("click keyup change", function(){
-            if(!$(this).hasClass("fo-submit-invalid") && !$(this).hasClass("fo-submit") && !$(this).hasClass("fo-submit-button")) app.checkField($(this));
+
+        app.$form.find(".fo-field").each(function(){
+            app.checkField($(this));
         });
         
+        app.$form.find(".fo-field").on("click keyup change", function(e){
+            if(!$(this).hasClass("fo-submit-invalid") && !$(this).hasClass("fo-submit") && !$(this).hasClass("fo-submit-button")) app.checkField($(this));
+            
+            if($(this).hasClass("fo-zipcode")){
+                if(!$(this).hasClass("fo-invalid-value")){
+                    $.ajax({
+                        url: "http://where.yahooapis.com/v1/places.q("+$(this).val()+","+app.lang.country_code+");count=0?appid=dj0zaiZpPTNVakxDbDlIVmd4RCZzPWNvbnN1bWVyc2VjcmV0Jng9NTY-&format=json&lang="+app.lang.id,
+                        type: "GET",
+                        dataType: "jsonp",
+                        success: function(data){
+                            if(data.places.place){
+                                var region = "", city="", street="";
+                                if(data.places.place[0].admin1) region = data.places.place[0].admin1;
+                                if(data.places.place[0].admin2) city = data.places.place[0].admin2;
+                                if(data.places.place[0].admin3) street = data.places.place[0].admin3;
+                                app.$form.find(".fo-region option[value=\""+region+"\"]").prop("selected", true);
+                                app.$form.find(".fo-address-1").val(city+app.lang.separator+street);
+                                app.$form.find(".fo-region").trigger("click");
+                                app.$form.find(".fo-address-1").trigger("click");
+                            }
+                        }
+                    })
+                }
+            }
+    
+        });
+
     }
     
+    app.datepicker_support = function(field){
+        var input = document.createElement('input');
+        input.setAttribute('type', field);
+        var notACorrectValue = 'not-a-correct-value';
+        input.setAttribute('value', notACorrectValue); 
+        return (input.value !== notACorrectValue);
+    }
 
     app.checkField = function($field){
         
         if(!app.checkFieldEmpty($field)) $field.addClass("fo-not-empty");
         else $field.removeClass("fo-not-empty");
         
-        if($field.hasClass("fo-required")){
-            if(!$field.hasClass("fo-not-empty")) $field.addClass("fo-invalid-required");
-            else $field.removeClass("fo-invalid-required");
+        if($field.parents(".fo-item").hasClass("fo-required")){
+            if(!$field.hasClass("fo-not-empty")) $field.parents(".fo-item").addClass("fo-invalid-required");
+            else $field.parents(".fo-item").removeClass("fo-invalid-required");
         }
-        
-        var regex = /[^]*/, test_value=$field.val(), message="";
+                
+        var regexp = /[^]*/, test_value=$field.val(), message="";
         if($field.hasClass("fo-email")){
             message = app.lang.email.message;
-            regex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/g;
+            regexp = new RegExp(app.settings.email_regexp);
         }
         if($field.hasClass("fo-url")){
             message = app.lang.url.message;
-            regex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/g;
+            regexp = new RegExp(app.settings.url_regexp);
         }
         if($field.hasClass("fo-tel")){
             message = app.lang.tel.message;
-            switch(app.settings.tel_mode){
-                case 'global':
-                    regex = /^([0-9\uff10-\uff19\+\-\uff0b\u30FC\uFF0D]){8,66}$/g;
-                    break;
-                case 'jp':
-                    test_value = test_value.replace(/-/g, "");
-                    regex = /^[0-9]{2,3}[0-9]{4}[0-9]{4}$/g;
-                    break;
-                case 'fr':
-                    regex = /^[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}$/g;
-                    break;
-                default:
-                    regex = /^([0-9\uff10-\uff19\+\-\uff0b\u30FC\uFF0D]){8,66}$/g;
-                    break;
-            }
+            regexp = new RegExp(app.settings.tel_regexp);
+        }
+        if($field.hasClass("fo-date")){
+            message = app.lang.date.message;
+            if(!app.datepicker_support("date")) regexp = new RegExp(app.settings.date_regexp);
+        }
+        if($field.hasClass("fo-time")){
+            message = app.lang.time.message;
+            regexp = new RegExp(app.settings.time_regexp);
+        }
+        if($field.hasClass("fo-number")){
+            message = app.lang.number.message;
+            regexp = new RegExp(app.settings.number_regexp);
+            console.log(test_value);
+        }
+        if($field.hasClass("fo-zipcode")){
+            message = app.lang.zipcode.message;
+            regexp = new RegExp(app.settings.zipcode_regexp);
+        }
+        if($field.hasClass("fo-katakana")){
+            message = app.lang.katakana.message;
+            regexp = new RegExp(/[\u30A0-\u30FF]+/g);
+        }
+        if($field.hasClass("fo-hiragana")){
+            message = app.lang.hiragana.message;
+            regexp = new RegExp(/[\u3041-\u3096]+/g);
         }
 
-        if(test_value.match(regex)==null) $field.addClass("fo-invalid-value");
+        if(test_value.match(regexp)==null) $field.addClass("fo-invalid-value");
         else $field.removeClass("fo-invalid-value");
         
-        if($field.hasClass("fo-invalid-required") || $field.hasClass("fo-invalid-value")) $field.addClass("fo-invalid-field");
+        if($field.parents(".fo-item").hasClass("fo-invalid-required") || $field.hasClass("fo-invalid-value")) $field.addClass("fo-invalid-field");
         else $field.removeClass("fo-invalid-field");
         
         if($field.hasClass("fo-invalid-field")){
-            if($field.hasClass("fo-invalid-required")){
-                if($field.hasClass("fo-invalid-value") && $field.parent().find(".fo-invalid-field-message").length==0){
-                    $field.after('<span class="fo-invalid-field-message">'+message+'</span>');
-                }
+            if($field.parents(".fo-item").hasClass("fo-invalid-required")){
+                if($field.hasClass("fo-invalid-value") && $field.parents(".fo-fields").find(".fo-error[fo-field-id='"+$field.attr("fo-field-id")+"']").length==0){
+                    $field.parents(".fo-fields").find(".fo-errors").append('<div class="fo-error" fo-field-id="'+$field.attr("fo-field-id")+'">'+message+'</div>');
+                } 
             }
             else{
                 if($field.hasClass("fo-invalid-value")){
-                    if($field.hasClass("fo-not-empty") && $field.parent().find(".fo-invalid-field-message").length==0){
-                        $field.after('<span class="fo-invalid-field-message">'+message+'</span>');
-                    }
-                    else if(!$field.hasClass("fo-not-empty")) $field.parent().find(".fo-invalid-field-message").remove();
+                    if($field.hasClass("fo-not-empty") && $field.parents(".fo-fields").find(".fo-error[fo-field-id='"+$field.attr("fo-field-id")+"']").length==0){
+                        $field.parents(".fo-fields").find(".fo-errors").append('<div class="fo-error" fo-field-id="'+$field.attr("fo-field-id")+'">'+message+'</div>');
+                    } 
+                    else if(!$field.hasClass("fo-not-empty")) $field.parent().find(".fo-error[fo-field-id='"+$field.attr("fo-field-id")+"']").remove();
                 }
             }   
         }
         else{
-            $field.parent().find(".fo-invalid-field-message").remove();
+            $field.parent().find(".fo-error[fo-field-id='"+$field.attr("fo-field-id")+"']").remove();
         }
 
         app.checkForm();
@@ -128,7 +190,7 @@ $.fn.formOptimizer = function(settings){
         
         var empty = false;
         if($field.hasClass("fo-radio")){
-            if(app.$form.find("[name="+$field.attr("name")+"]").length==0) empty=true;
+            if(app.$form.find("[name="+$field.attr("name")+"]:checked").length==0) empty=true;
         }
         else if($field.hasClass("fo-checkbox")){
             if(!$field.is(":checked")) empty=true;
@@ -142,7 +204,7 @@ $.fn.formOptimizer = function(settings){
     app.checkForm = function(){
         
         var nbInvalidRequired = app.$form.find(".fo-invalid-required").length;
-        $("#fo-required-fields span").html(nbInvalidRequired+"/"+$(".fo-required").length);
+        $("#fo-required-fields span").html(nbInvalidRequired+"/"+app.$form.find(".fo-required").length);
         
         if(app.$form.find(".fo-invalid-required").length>0) $("#fo-required-fields").fadeIn();
         else $("#fo-required-fields").fadeOut();
@@ -153,7 +215,7 @@ $.fn.formOptimizer = function(settings){
         
         if(invalidFields==0){
             if(app.$form.find(".fo-submit").length==0){
-                app.$form.find(".fo-submit-invalid").parent().append(app.$submit_button);
+                app.$form.find(".fo-submit-invalid").parent().append(app.$form[0].submit_button);
                 app.$form.find(".fo-submit-invalid").hide();
             }
         }
@@ -161,6 +223,8 @@ $.fn.formOptimizer = function(settings){
             app.$form.find(".fo-submit").remove();
             app.$form.find(".fo-submit-invalid").show();
         }
+        
+        app.settings.on_load();
         
     }
     
