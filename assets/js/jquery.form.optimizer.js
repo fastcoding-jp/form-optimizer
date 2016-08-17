@@ -142,7 +142,6 @@ $.fn.formOptimizer = function(settings){
         if($field.hasClass("fo-number")){
             message = app.lang.number.message;
             regexp = new RegExp(app.settings.number_regexp);
-            console.log(test_value);
         }
         if($field.hasClass("fo-zipcode")){
             message = app.lang.zipcode.message;
