@@ -189,7 +189,7 @@ $.fn.formOptimizer = function(settings){
     app.checkFieldEmpty = function($field){
         
         var empty = false;
-        if($field.hasClass("fo-radio")){
+        if($field.hasClass("fo-radio") || $field.hasClass("fo-checkbox")){
             if(app.$form.find("[name="+$field.attr("name")+"]:checked").length==0) empty=true;
         }
         else if($field.hasClass("fo-checkbox")){
