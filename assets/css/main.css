@@ -52,7 +52,7 @@ form{
     vertical-align: top;
 }
 
-input:not([type="radio"]),
+input:not([type="radio"]):not([type="checkbox"]),
 select{
     height: 35px;
     padding-left: 10px;
@@ -80,14 +80,14 @@ textarea{
     resize: none;
 }
 
-input:not([type="radio"]), textarea, select{
+input:not([type="radio"]):not([type="checkbox"]), textarea, select{
     border: 1px solid #b7b7b7;
     border-radius: 5px;
     -webkit-transition: all 0.3s ease-in;
     transition: all 0.3s ease-in;
     outline: none;
 }
-input:not([type="radio"]):focus, textarea:focus, select:focus{
+input:not([type="radio"]):not([type="checkbox"])focus, textarea:focus, select:focus{
     border: 1px solid #21cdf1;
     -webkit-box-shadow: 0px 0px 4px #00d3ff;
     box-shadow: 0px 0px 4px #00d3ff;
