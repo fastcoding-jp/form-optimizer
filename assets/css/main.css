@@ -63,7 +63,7 @@ select{
     height: 100%;
 }
 
-.double input,
+.double input:not([type="radio"]):not([type="checkbox"]),
 .double select{
     width: 48%;
 }
