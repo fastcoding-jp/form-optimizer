@@ -173,7 +173,7 @@ $.fn.formOptimizer = function(settings){
                     if($field.hasClass("fo-not-empty") && $field.parents(".fo-fields").find(".fo-error[fo-field-id='"+$field.attr("fo-field-id")+"']").length==0){
                         $field.parents(".fo-fields").find(".fo-errors").append('<div class="fo-error" fo-field-id="'+$field.attr("fo-field-id")+'">'+message+'</div>');
                     }
-                    else if(!$field.hasClass("fo-not-empty")) $field.parent().find(".fo-error[fo-field-id='"+$field.attr("fo-field-id")+"']").remove();
+                    else if(!$field.hasClass("fo-not-empty")) $field.parent(".fo-fields").find(".fo-error[fo-field-id='"+$field.attr("fo-field-id")+"']").remove();
                 }
             }   
         }
