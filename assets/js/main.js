@@ -10,7 +10,8 @@ $(function(){
     app.form = function(){
         $("#contact_form").formOptimizer({
             language_path: 'assets/lang/',
-            language:'ja_JP',
+            language:'fr_FR',
+            zipcode_regexp: /^[0-9]{5}/g,
             on_load: function(){
                 app.on_scroll();
             }

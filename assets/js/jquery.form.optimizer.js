@@ -10,7 +10,7 @@ $.fn.formOptimizer = function(settings){
         email_regexp: /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i,
         tel_regexp: /^[0-9]{2,3}[0-9]{4}[0-9]{4}$/g,
         url_regexp: /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/g,
-        zipcode_regexp: /^[0-9]{3}-[0-9]{4}/g,
+        zipcode_regexp: /^[0-9]{3}-?[0-9]{4}/g,
         date_regexp: /^[0-9]{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[1-2][0-9]|3[0-1])$/g,
         time_regexp: /^([0-1]{1}[0-9]{1}|2[0-3]):[0-5]{1}[0-9]$/g,
         number_regexp: /^\d*$/g,
@@ -77,17 +77,13 @@ $.fn.formOptimizer = function(settings){
             if($(this).hasClass("fo-zipcode")){
                 if(!$(this).hasClass("fo-invalid-value")){
                     $.ajax({
-                        url: "http://where.yahooapis.com/v1/places.q("+$(this).val()+","+app.lang.country_code+");count=0?appid=dj0zaiZpPTNVakxDbDlIVmd4RCZzPWNvbnN1bWVyc2VjcmV0Jng9NTY-&format=json&lang="+app.lang.id,
+                        url: "https://maps.googleapis.com/maps/api/geocode/json?address="+$(this).val()+","+app.lang.country_code+"&language="+app.lang.id,
                         type: "GET",
-                        dataType: "jsonp",
                         success: function(data){
-                            if(data.places.place){
-                                var region = "", city="", street="";
-                                if(data.places.place[0].admin1) region = data.places.place[0].admin1;
-                                if(data.places.place[0].admin2) city = data.places.place[0].admin2;
-                                if(data.places.place[0].admin3) street = data.places.place[0].admin3;
-                                app.$form.find(".fo-region option[value=\""+region+"\"]").prop("selected", true);
-                                app.$form.find(".fo-address-1").val(city+app.lang.separator+street);
+                            if(data.results[0].address_components){
+                                var address = app.parse_address(data.results[0].address_components);
+                                app.$form.find(".fo-region option[value=\""+address.prefecture+"\"]").prop("selected", true);
+                                app.$form.find(".fo-address-1").val(address.city+app.lang.separator+address.ward+app.lang.separator+address.street);
                                 app.$form.find(".fo-region").trigger("click");
                                 app.$form.find(".fo-address-1").trigger("click");
                             }
@@ -98,6 +94,19 @@ $.fn.formOptimizer = function(settings){
     
         });
 
+    }
+    
+    app.parse_address = function( resp ) {
+        var result = {prefecture:"", city:"", ward:"", street:""};
+        resp.forEach(function(resp) {
+            resp.types.forEach(function(type) {
+                if(type=="administrative_area_level_1") result.prefecture = resp.long_name;
+                if(type=="locality") result.city = resp.long_name;
+                if(type=="ward" || type=="administrative_area_level_2" || (type=="locality" && result.city=="")) result.ward = resp.long_name;
+                if(type=="sublocality") result.street = resp.long_name;
+            });
+        });
+        return result;
     }
     
     app.datepicker_support = function(field){
