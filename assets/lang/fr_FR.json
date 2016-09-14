@@ -47,6 +47,6 @@
         {"id": 11, "name": "Languedoc-Roussillon"}, 
         {"id": 12, "name": "Nord-Pas-de-Calais Picardie"}, 
         {"id": 13, "name": "Pays de la Loire"}, 
-        {"id": 14, "name": "Provence-Alpes-Côte d'Azur"}, 
+        {"id": 14, "name": "Provence-Alpes-Côte d'Azur"}
     ]
 }
