@@ -43,10 +43,10 @@
         {"id": 7, "name": "Centre-Val de Loire"}, 
         {"id": 8, "name": "Languedoc-Roussillon Midi-Pyrénées"}, 
         {"id": 9, "name": "Corse"}, 
-        {"id": 12, "name": "Île-de-France"}, 
-        {"id": 13, "name": "Languedoc-Roussillon"}, 
-        {"id": 17, "name": "Nord-Pas-de-Calais Picardie"}, 
-        {"id": 18, "name": "Pays de la Loire"}, 
-        {"id": 21, "name": "Provence-Alpes-Côte d'Azur"}, 
+        {"id": 10, "name": "Île-de-France"}, 
+        {"id": 11, "name": "Languedoc-Roussillon"}, 
+        {"id": 12, "name": "Nord-Pas-de-Calais Picardie"}, 
+        {"id": 13, "name": "Pays de la Loire"}, 
+        {"id": 14, "name": "Provence-Alpes-Côte d'Azur"}, 
     ]
 }
